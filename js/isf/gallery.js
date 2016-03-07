@@ -1,3 +1,4 @@
+document.addEventListener("DOMContentLoaded", function(event) {
 if (!window.Clipboard) {
    var pasteCatcher = document.createElement("div");
 
@@ -31,7 +32,7 @@ function pasteHandler(e) {
                // to create a temporary URL to the object
                var URLObj = window.URL || window.webkitURL;
                var source = URLObj.createObjectURL(blob);
-
+               console.log(source);
                // The URL can then be used as the source of an image
                createImage(source);
             }
@@ -74,7 +75,7 @@ function createImage(source) {
 }
 
 function addPasteToCanvas (pastedImage) {
-    var canvas = document.getElementById('canvas');
+    var canvas = document.getElementById('isfgallery-canvas');
     canvas.width = pastedImage.width;
     canvas.height = pastedImage.height;
     var context = canvas.getContext('2d');
@@ -336,11 +337,13 @@ function addPasteToCanvas (pastedImage) {
     //console.log((gameX + drawingX), (gameY + drawingY), drawingWH, drawingWH);
 
     // put the image data back after manipulation
-    var canvasForCrop = document.getElementById('cropped');
+    var canvasForCrop = document.getElementById('isfgallery-cropped');
     canvasForCrop.width = drawingWH;
     canvasForCrop.height = drawingWH;
     var cropCtx = canvasForCrop.getContext('2d');
     cropCtx.putImageData(cropped, 0, 0);
 
     canvas.style.display = 'none';
+    document.getElementById('isfgallery-uploadScreen').style.display = 'block';
 }
+});
