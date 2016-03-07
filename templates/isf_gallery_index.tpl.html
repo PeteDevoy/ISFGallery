@@ -1,0 +1,12 @@
+<xen:require js="js/isf/gallery.js" />
+<h1>Gallery</h1>
+
+<xen:foreach loop="$images" value="$image">
+<img src="{$image.path}"/>
+</xen:foreach>
+
+<p>Oh this is some cool stuff eh brah</p>
+
+<canvas id="isfgallery-canvas"></canvas>
+<canvas id="isfgallery-cropped" style="z-index:7601; position: absolute; top:50%; left:50%; max-width:50%; max-height:50%; "></canvas>
+<div id="isfgallery-uploadScreen" style="position:fixed;z-index:7600;top:0;right:0;bottom:0;left:0;background:rgba(0,0,0,0.5);display:none;"></div>
