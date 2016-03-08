@@ -125,15 +125,6 @@ function addPasteToCanvas (pastedImage) {
         matches[x] = 0;
         for (var y = 1; y < h - 1; y += 1) {
 
-            /*
-            var i = (y*w + x)*4;
-            var j = ((y - 1)*w + x)*4;
-            outputData[i] = edgeData[i];
-            outputData[i + 1] = edgeData[i + 1];
-            outputData[i + 2] = edgeData[i + 2];
-            outputData[(y*w + x)*4 + 3] = 255; // alpha
-            */
-
             var i = (y*w + x)*4;
             if ((edgeData[i - w * 4] & edgeData[i - w * 4 + 1] & edgeData[i - w * 4 + 2]) === 255) {
                 outputData[i] = 200;
@@ -154,36 +145,7 @@ function addPasteToCanvas (pastedImage) {
     var sorted = matches.slice(0);
     var sorted = sorted.sort(function (a, b) {return b - a;});
 
-
-    /*
-    //loop through top 5 from sorted list
-    for (var i = 0; i < 5; i++) {
-        //loop through unsorted list to find index
-        for (var x = halfX; x--;) {
-            if (matches[x] === sorted[i]) {
-                console.log('column', x, 'has', sorted[i], 'consecutive pixels');
-            }
-        }
-    }
-    */
-
     var leftEdgeCol;
-
-    for (var x = halfX; x--;) {
-        if (matches[x] === sorted[0]) {
-            leftEdgeCol = x;
-            for (var y = 1; y < h - 1; y += 1) {
-                var i = (y*w + x)*4;
-                /*
-                outputData[i] = 0;
-                outputData[i + 1] = 255;
-                outputData[i + 2] = 0;
-                outputData[i + 3] = 255;
-                */
-            }
-        }
-    }
-
     var longestRun = 0;
     var currentRun = 0;
     var longestTop = 0;
@@ -204,11 +166,6 @@ function addPasteToCanvas (pastedImage) {
         //else if above pixel is white and this pixel not white
         } else if (abovePxWhite && !thisPxWhite) {
 
-            console.log('---');
-            console.log('currentPx', edgeData[i], edgeData[i + 1], edgeData[i + 2]);
-            console.log('abovePx', edgeData[i - w], edgeData[i - w + 1], edgeData[i - w + 2]);
-            console.log('end of run at y - 1 =', y - 1);
-
             //if it is the longest run
             if (currentRun > longestRun) {
                 //record the length of the longest run
@@ -221,76 +178,11 @@ function addPasteToCanvas (pastedImage) {
         //else if current pixel is white
         } else if (thisPxWhite) {
             //we've alredy checked the above pixel it is the start of a new run
-            console.log('[[[ new run at ', y);
-            console.log('currentPx', edgeData[i], edgeData[i + 1], edgeData[i + 2]);
-            console.log('abovePx', edgeData[i - (w * 4)], edgeData[i - (w * 4) + 1], edgeData[i - (w * 4)+ 2]);
-            console.log(']]]');
             //clear the counter
             currentRun = 1;
         }
         //else if neither are white, continue
     }
-
-
-
-            /*
-    var leftEdgeTop = 0;
-    var currentRunTop = 0;
-    var longestRun = 0;
-    var currentRun = 0;
-    var longestRunBottom;
-    for (var y = 1; y < h - 1; y += 1) {
-        var i = (y*w + leftEdgeCol)*4;
-        if ((edgeData[i - w * 4] & edgeData[i - w * 4 + 1] & edgeData[i - w * 4 + 2]) === 255) {
-            if (currentRun === 0) {
-                currentRunTop = y;
-            }
-            currentRun++;
-            for (var xx = leftEdgeCol - 2; xx < leftEdgeCol + 2; xx += 1) {
-                var ii = (y*w + xx)*4;
-                outputData[ii] = 255;
-                outputData[ii + 1] = 255;
-                outputData[ii + 2] = 0;
-                outputData[ii + 3] = 255;
-            }
-            lastRunBottom = y;
-        } else {
-
-            for (var xx = leftEdgeCol - 2; xx < leftEdgeCol + 2; xx += 1) {
-                var ii = (y*w + xx)*4;
-                outputData[ii] = 0;
-                outputData[ii + 1] = 255;
-                outputData[ii + 2] = 255;
-                outputData[ii + 3] = 255;
-            }
-            if (currentRun > longestRun) {
-                longestRun = currentRun;
-                longestRunTop = currentRunTop;
-                /*
-                for (var xx = leftEdgeCol - 5; xx < leftEdgeCol + 5; xx += 1) {
-                    var ii = ((currentRunTop)*w + xx)*4;
-                    outputData[ii] = 255;
-                    outputData[ii + 1] = 0;
-                    outputData[ii + 2] = 255;
-                    outputData[ii + 3] = 255;
-                }
-                for (var xx = leftEdgeCol - 5; xx < leftEdgeCol + 5; xx += 1) {
-                    var ii = ((currentRunTop + currentRun)*w + xx)*4;
-                    outputData[ii] = 255;
-                    outputData[ii + 1] = 0;
-                    outputData[ii + 2] = 255;
-                    outputData[ii + 3] = 255;
-                }
-                */
-    /*
-                currentRun = 0;
-                currentRunTop = 0;
-            }
-        }
-    }
-    console.log('crt', currentRunTop);
-    */
-
 
     //game windows aspect is 3.5 * 6
     var gameH = Math.round(longestRun / 100) * 100;
@@ -301,10 +193,6 @@ function addPasteToCanvas (pastedImage) {
     var drawingY = (gameH / 7) * 0.85;
     var drawingWH = (gameH / 7) * 6;
     var gameY = longestRunTop;
-    console.log('longestRunTop:', longestRunTop);
-    console.log('var gameY = lastRunBottom - longestRun;');
-    //console.log('var', gameY, '=', lastRunBottom, '-', longestRun, ';');
-    console.log('...');
     var gameX = leftEdgeCol;
 
     for (var y = 1; y < h - 1; y += 1) {
@@ -323,22 +211,8 @@ function addPasteToCanvas (pastedImage) {
         outputData[i + 3] = 128;
     }
 
-    console.log();
-
-    console.log('gameW\tgameH\tdrawingX\tdrawingY');
-    console.log(gameW, '\t', gameH, '\t', drawingX, '\t', drawingY);
-
     //drawing canvas is 49% of the way in
-
-    console.log('longest run', longestRun);
-    console.log('longest run top', longestRunTop);
-
-
-    /*
-    context.putImageData(output, 0, 0);
-    */
     var cropped = context.getImageData((gameX + drawingX) + 1, (gameY + drawingY) - 2, drawingWH, drawingWH);
-    //console.log((gameX + drawingX), (gameY + drawingY), drawingWH, drawingWH);
 
     // put the image data back after manipulation
     var canvasForCrop = document.createElement('canvas');
