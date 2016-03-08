@@ -90,7 +90,7 @@ function addPasteToCanvas (pastedImage) {
     var input = context.getImageData(0, 0, canvas.width, canvas.height);
 
     // get an empty slate to put the data into
-    var edge = context.createImageData(canvas.width, canvas.height);
+    var edge   = context.createImageData(canvas.width, canvas.height);
     var output = context.createImageData(canvas.width, canvas.height);
 
     // alias some variables for convenience
@@ -146,6 +146,16 @@ function addPasteToCanvas (pastedImage) {
     var sorted = sorted.sort(function (a, b) {return b - a;});
 
     var leftEdgeCol;
+
+    for (var x = halfX; x--;) {
+        if (matches[x] === sorted[0]) {
+            leftEdgeCol = x;
+            for (var y = 1; y < h - 1; y += 1) {
+                var i = (y*w + x)*4;
+            }
+        }
+    }
+
     var longestRun = 0;
     var currentRun = 0;
     var longestTop = 0;
@@ -177,7 +187,7 @@ function addPasteToCanvas (pastedImage) {
 
         //else if current pixel is white
         } else if (thisPxWhite) {
-            //we've alredy checked the above pixel it is the start of a new run
+            //we've alredy checked the above pixel it is the start of a new
             //clear the counter
             currentRun = 1;
         }
@@ -211,7 +221,6 @@ function addPasteToCanvas (pastedImage) {
         outputData[i + 3] = 128;
     }
 
-    //drawing canvas is 49% of the way in
     var cropped = context.getImageData((gameX + drawingX) + 1, (gameY + drawingY) - 2, drawingWH, drawingWH);
 
     // put the image data back after manipulation
