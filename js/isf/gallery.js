@@ -75,11 +75,15 @@ function createImage(source) {
 }
 
 function addPasteToCanvas (pastedImage) {
-    var canvas = document.getElementById('isfgallery-canvas');
-    canvas.width = pastedImage.width;
-    canvas.height = pastedImage.height;
-    var context = canvas.getContext('2d');
+    var canvas = document.createElement("canvas");
+    var context;
 
+    canvas.id     = 'isfgallery-canvas';
+    canvas.width  = pastedImage.width;
+    canvas.height = pastedImage.height;
+    document.body.appendChild(canvas);
+
+    context = canvas.getContext('2d');
     context.drawImage(pastedImage, 0, 0);
 
     // get the image data to manipulate
@@ -337,13 +341,15 @@ function addPasteToCanvas (pastedImage) {
     //console.log((gameX + drawingX), (gameY + drawingY), drawingWH, drawingWH);
 
     // put the image data back after manipulation
-    var canvasForCrop = document.getElementById('isfgallery-cropped');
-    canvasForCrop.width = drawingWH;
+    var canvasForCrop = document.createElement('canvas');
+    canvasForCrop.id     = 'isfgallery-cropped';
+    canvasForCrop.width  = drawingWH;
     canvasForCrop.height = drawingWH;
+    document.body.appendChild(canvasForCrop);
+
     var cropCtx = canvasForCrop.getContext('2d');
     cropCtx.putImageData(cropped, 0, 0);
 
-    canvas.style.display = 'none';
     document.getElementById('isfgallery-uploadScreen').style.display = 'block';
 }
 });
